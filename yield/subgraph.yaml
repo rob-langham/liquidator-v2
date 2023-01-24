@@ -1,0 +1,68 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: ContangoYield
+    network: arbitrum-one
+    source:
+      address: "0x30E7348163016B3b6E1621A3Cb40e8CF33CE97db"
+      abi: ContangoYield
+      startBlock: 22177153
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - Upgraded
+      abis:
+        - name: ContangoYield
+          file: ./abis/ContangoYield.json
+      eventHandlers:
+        - event: PositionUpserted(indexed bytes32,indexed address,indexed uint256,uint256,uint256,int256,uint256,uint256,int256)
+          handler: handlePositionUpserted
+        # - event: PositionClosed(bytes32,address,uint256,uint256,uint256,int256,uint256,uint256,int256)
+        #   handlerPositionClosed
+        # - event: PositionDelivered(bytes32,address,uint256,address,uint256,uint256,uint256)
+        #   handlerPositionDelivered
+        # - event: PositionLiquidated(bytes32,address,uint256,uint256,uint256,int256,int256)
+        #   handlerPositionLiquidated
+
+        # - event: AdminChanged(address,address)
+        #   handlerAdminChanged
+        # - event: BalanceCollected(address,address,uint256)
+        #   handlerBalanceCollected
+        # - event: BeaconUpgraded(address)
+        #   handlerBeaconUpgraded
+        # - event: Initialized(uint8)
+        #   handler: Initialized(uint8)
+        # - event: Paused(address)
+        #   handler: Paused(address)
+        # - event: RoleAdminChanged(bytes32,bytes32,bytes32)
+        #   handlerRoleAdminChanged
+        # - event: RoleGranted(bytes32,address,address)
+        #   handlerRoleGranted
+        # - event: RoleRevoked(bytes32,address,address)
+        #   handlerRoleRevoked
+        # - event: Unpaused(address)
+        #   handler: Unpaused(address)
+        # - event: Upgraded(address)
+        #   handler: Upgraded(address)
+
+        # - event: CollateralAdded(bytes32,address,uint256,uint256,uint256)
+        #   handlerCollateralAdded
+        # - event: CollateralRemoved(bytes32,address,uint256,uint256,uint256)
+        #   handlerCollateralRemoved
+        # - event: ContractTraded(bytes32,address,uint256,(uint256,uint256,uint256,uint256,int256))
+        #   handlerContractTraded
+
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+
+      file: ./src/contango-yield.ts
