@@ -22,3 +22,293 @@ type Upgraded @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+type AssetAdded @entity(immutable: true) {
+  id: Bytes!
+  assetId: Bytes! # bytes6
+  asset: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DebtLimitsSet @entity(immutable: true) {
+  id: Bytes!
+  baseId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  max: BigInt! # uint96
+  min: Int! # uint24
+  dec: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type IlkAdded @entity(immutable: true) {
+  id: Bytes!
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RateOracleAdded @entity(immutable: true) {
+  id: Bytes!
+  baseId: Bytes! # bytes6
+  oracle: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RoleAdminChanged @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  newAdminRole: Bytes! # bytes4
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RoleGranted @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  account: Bytes! # address
+  sender: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RoleRevoked @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  account: Bytes! # address
+  sender: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SeriesAdded @entity(immutable: true) {
+  id: Bytes!
+  seriesId: Bytes! # bytes6
+  baseId: Bytes! # bytes6
+  fyToken: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SeriesMatured @entity(immutable: true) {
+  id: Bytes!
+  seriesId: Bytes! # bytes6
+  rateAtMaturity: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SpotOracleAdded @entity(immutable: true) {
+  id: Bytes!
+  baseId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  oracle: Bytes! # address
+  ratio: BigInt! # uint32
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultBuilt @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  owner: Bytes! # address
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultDestroyed @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultGiven @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  receiver: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultPoured @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  ink: BigInt! # int128
+  art: BigInt! # int128
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultRolled @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  seriesId: Bytes! # bytes6
+  art: BigInt! # uint128
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultStirred @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # bytes12
+  to: Bytes! # bytes12
+  ink: BigInt! # uint128
+  art: BigInt! # uint128
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VaultTweaked @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type AnotherWitchSet @entity(immutable: true) {
+  id: Bytes!
+  value: Bytes! # address
+  isWitch: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Auctioned @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  auction_owner: Bytes! # address
+  auction_start: BigInt! # uint32
+  auction_baseId: Bytes! # bytes6
+  auction_ink: BigInt! # uint128
+  auction_art: BigInt! # uint128
+  auction_auctioneer: Bytes! # address
+  auction_ilkId: Bytes! # bytes6
+  auction_seriesId: Bytes! # bytes6
+  duration: BigInt! # uint256
+  initialCollateralProportion: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type AuctioneerRewardSet @entity(immutable: true) {
+  id: Bytes!
+  auctioneerReward: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Bought @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  buyer: Bytes! # address
+  ink: BigInt! # uint256
+  art: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Cancelled @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Ended @entity(immutable: true) {
+  id: Bytes!
+  vaultId: Bytes! # bytes12
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type LimitSet @entity(immutable: true) {
+  id: Bytes!
+  ilkId: Bytes! # bytes6
+  baseId: Bytes! # bytes6
+  max: BigInt! # uint128
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type LineSet @entity(immutable: true) {
+  id: Bytes!
+  ilkId: Bytes! # bytes6
+  baseId: Bytes! # bytes6
+  duration: BigInt! # uint32
+  vaultProportion: BigInt! # uint64
+  collateralProportion: BigInt! # uint64
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Point @entity(immutable: true) {
+  id: Bytes!
+  param: Bytes! # bytes32
+  oldValue: Bytes! # address
+  newValue: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ContangoWitchRoleAdminChanged @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  newAdminRole: Bytes! # bytes4
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ContangoWitchRoleGranted @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  account: Bytes! # address
+  sender: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ContangoWitchRoleRevoked @entity(immutable: true) {
+  id: Bytes!
+  role: Bytes! # bytes4
+  account: Bytes! # address
+  sender: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

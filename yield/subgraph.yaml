@@ -21,48 +21,135 @@ dataSources:
         - name: ContangoYield
           file: ./abis/ContangoYield.json
       eventHandlers:
-        - event: PositionUpserted(indexed bytes32,indexed address,indexed uint256,uint256,uint256,int256,uint256,uint256,int256)
+        - event: PositionUpserted(indexed bytes32,indexed address,indexed
+            uint256,uint256,uint256,int256,uint256,uint256,int256)
           handler: handlePositionUpserted
-        # - event: PositionClosed(bytes32,address,uint256,uint256,uint256,int256,uint256,uint256,int256)
-        #   handlerPositionClosed
-        # - event: PositionDelivered(bytes32,address,uint256,address,uint256,uint256,uint256)
-        #   handlerPositionDelivered
-        # - event: PositionLiquidated(bytes32,address,uint256,uint256,uint256,int256,int256)
-        #   handlerPositionLiquidated
-
-        # - event: AdminChanged(address,address)
-        #   handlerAdminChanged
-        # - event: BalanceCollected(address,address,uint256)
-        #   handlerBalanceCollected
-        # - event: BeaconUpgraded(address)
-        #   handlerBeaconUpgraded
-        # - event: Initialized(uint8)
-        #   handler: Initialized(uint8)
-        # - event: Paused(address)
-        #   handler: Paused(address)
-        # - event: RoleAdminChanged(bytes32,bytes32,bytes32)
-        #   handlerRoleAdminChanged
-        # - event: RoleGranted(bytes32,address,address)
-        #   handlerRoleGranted
-        # - event: RoleRevoked(bytes32,address,address)
-        #   handlerRoleRevoked
-        # - event: Unpaused(address)
-        #   handler: Unpaused(address)
-        # - event: Upgraded(address)
-        #   handler: Upgraded(address)
-
-        # - event: CollateralAdded(bytes32,address,uint256,uint256,uint256)
-        #   handlerCollateralAdded
-        # - event: CollateralRemoved(bytes32,address,uint256,uint256,uint256)
-        #   handlerCollateralRemoved
-        # - event: ContractTraded(bytes32,address,uint256,(uint256,uint256,uint256,uint256,int256))
-        #   handlerContractTraded
-
         - event: AdminChanged(address,address)
           handler: handleAdminChanged
         - event: BeaconUpgraded(indexed address)
           handler: handleBeaconUpgraded
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-
       file: ./src/contango-yield.ts
+  - kind: ethereum
+    name: ContangoCauldron
+    network: arbitrum-one
+    source:
+      address: "0x44386ddB4C44E7CB8981f97AF89E928Ddd4258DD"
+      abi: ContangoCauldron
+      startBlock: 21990182
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AssetAdded
+        - DebtLimitsSet
+        - IlkAdded
+        - RateOracleAdded
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+        - SeriesAdded
+        - SeriesMatured
+        - SpotOracleAdded
+        - VaultBuilt
+        - VaultDestroyed
+        - VaultGiven
+        - VaultPoured
+        - VaultRolled
+        - VaultStirred
+        - VaultTweaked
+      abis:
+        - name: ContangoCauldron
+          file: ./abis/ContangoCauldron.json
+      eventHandlers:
+        - event: AssetAdded(indexed bytes6,indexed address)
+          handler: handleAssetAdded
+        - event: DebtLimitsSet(indexed bytes6,indexed bytes6,uint96,uint24,uint8)
+          handler: handleDebtLimitsSet
+        - event: IlkAdded(indexed bytes6,indexed bytes6)
+          handler: handleIlkAdded
+        - event: RateOracleAdded(indexed bytes6,indexed address)
+          handler: handleRateOracleAdded
+        - event: RoleAdminChanged(indexed bytes4,indexed bytes4)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes4,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes4,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: SeriesAdded(indexed bytes6,indexed bytes6,indexed address)
+          handler: handleSeriesAdded
+        - event: SeriesMatured(indexed bytes6,uint256)
+          handler: handleSeriesMatured
+        - event: SpotOracleAdded(indexed bytes6,indexed bytes6,indexed address,uint32)
+          handler: handleSpotOracleAdded
+        - event: VaultBuilt(indexed bytes12,indexed address,indexed bytes6,bytes6)
+          handler: handleVaultBuilt
+        - event: VaultDestroyed(indexed bytes12)
+          handler: handleVaultDestroyed
+        - event: VaultGiven(indexed bytes12,indexed address)
+          handler: handleVaultGiven
+        - event: VaultPoured(indexed bytes12,indexed bytes6,indexed bytes6,int128,int128)
+          handler: handleVaultPoured
+        - event: VaultRolled(indexed bytes12,indexed bytes6,uint128)
+          handler: handleVaultRolled
+        - event: VaultStirred(indexed bytes12,indexed bytes12,uint128,uint128)
+          handler: handleVaultStirred
+        - event: VaultTweaked(indexed bytes12,indexed bytes6,indexed bytes6)
+          handler: handleVaultTweaked
+      file: ./src/contango-cauldron.ts
+  - kind: ethereum
+    name: ContangoWitch
+    network: arbitrum-one
+    source:
+      address: "0x89343a24a217172A569A0bD68763Bf0671A3efd8"
+      abi: ContangoWitch
+      startBlock: 22950453
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AnotherWitchSet
+        - Auctioned
+        - AuctioneerRewardSet
+        - Bought
+        - Cancelled
+        - Ended
+        - LimitSet
+        - LineSet
+        - Point
+        - ContangoWitchRoleAdminChanged
+        - ContangoWitchRoleGranted
+        - ContangoWitchRoleRevoked
+      abis:
+        - name: ContangoWitch
+          file: ./abis/ContangoWitch.json
+      eventHandlers:
+        - event: AnotherWitchSet(indexed address,bool)
+          handler: handleAnotherWitchSet
+        - event: Auctioned(indexed
+            bytes12,(address,uint32,bytes6,uint128,uint128,address,bytes6,bytes6),uint256,uint256)
+          handler: handleAuctioned
+        - event: AuctioneerRewardSet(uint256)
+          handler: handleAuctioneerRewardSet
+        - event: Bought(indexed bytes12,indexed address,uint256,uint256)
+          handler: handleBought
+        - event: Cancelled(indexed bytes12)
+          handler: handleCancelled
+        - event: Ended(indexed bytes12)
+          handler: handleEnded
+        - event: LimitSet(indexed bytes6,indexed bytes6,uint128)
+          handler: handleLimitSet
+        - event: LineSet(indexed bytes6,indexed bytes6,uint32,uint64,uint64)
+          handler: handleLineSet
+        - event: Point(indexed bytes32,indexed address,indexed address)
+          handler: handlePoint
+        - event: ContangoWitchRoleAdminChanged(indexed bytes4,indexed bytes4)
+          handler: handleContangoWitchRoleAdminChanged
+        - event: ContangoWitchRoleGranted(indexed bytes4,indexed address,indexed address)
+          handler: handleContangoWitchRoleGranted
+        - event: ContangoWitchRoleRevoked(indexed bytes4,indexed address,indexed address)
+          handler: handleContangoWitchRoleRevoked
+      file: ./src/contango-witch.ts

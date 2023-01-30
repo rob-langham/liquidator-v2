@@ -2,6 +2,12 @@
   "arbitrum-one": {
     "ContangoYield": {
       "address": "0x30E7348163016B3b6E1621A3Cb40e8CF33CE97db"
+    },
+    "ContangoCauldron": {
+      "address": "0x44386ddB4C44E7CB8981f97AF89E928Ddd4258DD"
+    },
+    "ContangoWitch": {
+      "address": "0x89343a24a217172A569A0bD68763Bf0671A3efd8"
     }
   }
 }
