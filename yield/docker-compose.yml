@@ -19,8 +19,8 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       # ethereum: 'arbitrum-one:https://rpc.tenderly.co/fork/76b6e20a-e236-45f4-8a7b-f1be583de6d6'
-      ethereum: 'arbitrum-one:http://host.docker.internal:8545'
-      #ethereum: 'arbitrum-one:https://arb-mainnet.g.alchemy.com/v2/09QnoIIGLQNSf1ETgfReOXDs6Bz-yqBt'
+      # ethereum: 'arbitrum-one:http://host.docker.internal:8545'
+      ethereum: 'arbitrum-one:http://host.docker.internal:4525/v2/JDynXtmQpyyeFCFCclc8tH_8RdyaaVhv'
       GRAPH_LOG: info
       GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: 10000000
   ipfs:
@@ -28,7 +28,7 @@ services:
     ports:
       - '5001:5001'
     volumes:
-      - ./data/ipfs:/data/ipfs
+      - indexer-ipfs:/data/ipfs
   postgres:
     image: postgres
     ports:
@@ -48,4 +48,8 @@ services:
       PGDATA: "/var/lib/postgresql/data"
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - indexer-postgres:/var/lib/postgresql/data
+
+volumes:
+  indexer-ipfs:
+  indexer-postgres:
