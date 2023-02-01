@@ -347,11 +347,11 @@ export function handleVaultStirred(event: VaultStirredEvent): void {
   entity.save()
 
   storeVaultUpdate(
-    event.params.to,
+    event.params.from,
     null,
     null,
-    event.params.ink,
-    event.params.art,
+    event.params.ink.neg(),
+    event.params.art.neg(),
     null,
     true
   )
