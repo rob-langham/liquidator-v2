@@ -1,3 +1,4 @@
+import { BigInt, Bytes, store } from "@graphprotocol/graph-ts"
 import {
   AssetAdded as AssetAddedEvent,
   DebtLimitsSet as DebtLimitsSetEvent,
@@ -28,6 +29,7 @@ import {
   SeriesAdded,
   SeriesMatured,
   SpotOracleAdded,
+  Vault,
   VaultBuilt,
   VaultDestroyed,
   VaultGiven,
@@ -210,6 +212,16 @@ export function handleVaultBuilt(event: VaultBuiltEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    event.params.seriesId,
+    event.params.ilkId,
+    null,
+    null,
+    event.params.owner,
+    true
+  )
 }
 
 export function handleVaultDestroyed(event: VaultDestroyedEvent): void {
@@ -224,6 +236,18 @@ export function handleVaultDestroyed(event: VaultDestroyedEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    null,
+    null,
+    null,
+    null,
+    null,
+    true
+  )
+
+  // store.remove('Vault', event.params.vaultId.toHex())
 }
 
 export function handleVaultGiven(event: VaultGivenEvent): void {
@@ -239,6 +263,16 @@ export function handleVaultGiven(event: VaultGivenEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    null,
+    null,
+    null,
+    null,
+    event.params.receiver,
+    true
+  )
 }
 
 export function handleVaultPoured(event: VaultPouredEvent): void {
@@ -257,6 +291,16 @@ export function handleVaultPoured(event: VaultPouredEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    event.params.seriesId,
+    event.params.ilkId,
+    event.params.ink,
+    event.params.art,
+    null,
+    true
+  )
 }
 
 export function handleVaultRolled(event: VaultRolledEvent): void {
@@ -273,6 +317,16 @@ export function handleVaultRolled(event: VaultRolledEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    event.params.seriesId,
+    null,
+    null,
+    event.params.art,
+    null,
+    false
+  )
 }
 
 export function handleVaultStirred(event: VaultStirredEvent): void {
@@ -290,6 +344,25 @@ export function handleVaultStirred(event: VaultStirredEvent): void {
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
 
   entity.save()
+
+  storeVaultUpdate(
+    event.params.to,
+    null,
+    null,
+    event.params.ink,
+    event.params.art,
+    null,
+    true
+  )
+  storeVaultUpdate(
+    event.params.to,
+    null,
+    null,
+    event.params.ink,
+    event.params.art,
+    null,
+    true
+  )
 }
 
 export function handleVaultTweaked(event: VaultTweakedEvent): void {
@@ -304,6 +377,51 @@ export function handleVaultTweaked(event: VaultTweakedEvent): void {
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
+
+  entity.save()
+
+  storeVaultUpdate(
+    event.params.vaultId,
+    event.params.seriesId,
+    event.params.ilkId,
+    null,
+    null,
+    null,
+    true
+  )
+}
+
+function storeVaultUpdate(
+  vaultId: Bytes,
+  seriesId: Bytes | null,
+  ilkId: Bytes | null,
+  ink: BigInt | null,
+  art: BigInt | null,
+  owner: Bytes | null,
+  delta: boolean = false
+): void {
+  let entity = Vault.load(vaultId)
+
+  if (!entity) {
+    entity = new Vault(vaultId)
+    entity.ink = ink ? entity.ink : BigInt.fromI32(0)
+    entity.art = art ? entity.art : BigInt.fromI32(0)
+  } else {
+    entity.ink = ink ? (delta ? entity.ink.plus(ink) : ink) : entity.ink
+    entity.art = art ? (delta ? entity.art.plus(art) : art) : entity.art
+  }
+
+  if (owner) {
+    entity.owner = owner
+  }
+
+  if (seriesId) {
+    entity.seriesId = seriesId
+  }
+
+  if (ilkId) {
+    entity.ilkId = ilkId
+  }
 
   entity.save()
 }
