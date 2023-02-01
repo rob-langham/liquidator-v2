@@ -1,3 +1,4 @@
+import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   AnotherWitchSet as AnotherWitchSetEvent,
   Auctioned as AuctionedEvent,
@@ -24,7 +25,8 @@ import {
   Point,
   ContangoWitchRoleAdminChanged,
   ContangoWitchRoleGranted,
-  ContangoWitchRoleRevoked
+  ContangoWitchRoleRevoked,
+  WitchLiquidatablePairs
 } from "../generated/schema"
 
 export function handleAnotherWitchSet(event: AnotherWitchSetEvent): void {
@@ -139,6 +141,24 @@ export function handleLimitSet(event: LimitSetEvent): void {
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
   entity.index = event.block.number.leftShift(32).plus(event.logIndex)
+
+  entity.save()
+
+  storeWitchLiquidationFlagUpdate(event.params.ilkId, event.params.baseId, event.params.max)
+}
+
+export function storeWitchLiquidationFlagUpdate(ilkId: Bytes, baseId: Bytes, max: BigInt): void {
+  const id = ilkId.concat(baseId)
+  
+  let entity = WitchLiquidatablePairs.load(id)
+
+  if (entity == null) {
+    entity = new WitchLiquidatablePairs(id)
+    entity.ilkId = ilkId
+    entity.baseId = baseId
+  }
+
+  entity.liquidationsEnabled = max.gt(BigInt.fromI32(0))
 
   entity.save()
 }

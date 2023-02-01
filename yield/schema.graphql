@@ -5,6 +5,7 @@ type AdminChanged @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type BeaconUpgraded @entity(immutable: true) {
@@ -13,6 +14,7 @@ type BeaconUpgraded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Upgraded @entity(immutable: true) {
@@ -21,6 +23,7 @@ type Upgraded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 type AssetAdded @entity(immutable: true) {
   id: Bytes!
@@ -29,6 +32,7 @@ type AssetAdded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type DebtLimitsSet @entity(immutable: true) {
@@ -41,6 +45,7 @@ type DebtLimitsSet @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type IlkAdded @entity(immutable: true) {
@@ -50,6 +55,7 @@ type IlkAdded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type RateOracleAdded @entity(immutable: true) {
@@ -59,6 +65,7 @@ type RateOracleAdded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type RoleAdminChanged @entity(immutable: true) {
@@ -68,6 +75,7 @@ type RoleAdminChanged @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type RoleGranted @entity(immutable: true) {
@@ -78,6 +86,7 @@ type RoleGranted @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type RoleRevoked @entity(immutable: true) {
@@ -88,6 +97,7 @@ type RoleRevoked @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type SeriesAdded @entity(immutable: true) {
@@ -98,6 +108,7 @@ type SeriesAdded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type SeriesMatured @entity(immutable: true) {
@@ -107,6 +118,7 @@ type SeriesMatured @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type SpotOracleAdded @entity(immutable: true) {
@@ -118,6 +130,7 @@ type SpotOracleAdded @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultBuilt @entity(immutable: true) {
@@ -126,29 +139,29 @@ type VaultBuilt @entity(immutable: true) {
   owner: Bytes! # address
   seriesId: Bytes! # bytes6
   ilkId: Bytes! # bytes6
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultDestroyed @entity(immutable: true) {
   id: Bytes!
   vaultId: Bytes! # bytes12
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultGiven @entity(immutable: true) {
   id: Bytes!
   vaultId: Bytes! # bytes12
   receiver: Bytes! # address
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultPoured @entity(immutable: true) {
@@ -158,10 +171,10 @@ type VaultPoured @entity(immutable: true) {
   ilkId: Bytes! # bytes6
   ink: BigInt! # int128
   art: BigInt! # int128
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultRolled @entity(immutable: true) {
@@ -169,10 +182,10 @@ type VaultRolled @entity(immutable: true) {
   vaultId: Bytes! # bytes12
   seriesId: Bytes! # bytes6
   art: BigInt! # uint128
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultStirred @entity(immutable: true) {
@@ -181,10 +194,10 @@ type VaultStirred @entity(immutable: true) {
   to: Bytes! # bytes12
   ink: BigInt! # uint128
   art: BigInt! # uint128
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type VaultTweaked @entity(immutable: true) {
@@ -192,10 +205,10 @@ type VaultTweaked @entity(immutable: true) {
   vaultId: Bytes! # bytes12
   seriesId: Bytes! # bytes6
   ilkId: Bytes! # bytes6
-  index: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Vault @entity(immutable: false) {
@@ -214,6 +227,7 @@ type AnotherWitchSet @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Auctioned @entity(immutable: true) {
@@ -232,6 +246,7 @@ type Auctioned @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type AuctioneerRewardSet @entity(immutable: true) {
@@ -240,6 +255,7 @@ type AuctioneerRewardSet @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Bought @entity(immutable: true) {
@@ -251,6 +267,7 @@ type Bought @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Cancelled @entity(immutable: true) {
@@ -259,6 +276,7 @@ type Cancelled @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Ended @entity(immutable: true) {
@@ -267,6 +285,7 @@ type Ended @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type LimitSet @entity(immutable: true) {
@@ -277,6 +296,14 @@ type LimitSet @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
+}
+
+type WitchLiquidatablePairs @entity(immutable: false) {
+  id: Bytes!
+  ilkId: Bytes! # bytes6
+  baseId: Bytes! # bytes6
+  liquidationsEnabled: Boolean! # uint128
 }
 
 type LineSet @entity(immutable: true) {
@@ -289,6 +316,7 @@ type LineSet @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type Point @entity(immutable: true) {
@@ -299,6 +327,7 @@ type Point @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type ContangoWitchRoleAdminChanged @entity(immutable: true) {
@@ -308,6 +337,7 @@ type ContangoWitchRoleAdminChanged @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type ContangoWitchRoleGranted @entity(immutable: true) {
@@ -318,6 +348,7 @@ type ContangoWitchRoleGranted @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
 
 type ContangoWitchRoleRevoked @entity(immutable: true) {
@@ -328,4 +359,5 @@ type ContangoWitchRoleRevoked @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  index: BigInt!
 }
