@@ -100,25 +100,11 @@ type RoleRevoked @entity(immutable: true) {
   index: BigInt!
 }
 
-type SeriesAdded @entity(immutable: true) {
+type Series @entity(immutable: false) {
   id: Bytes!
-  seriesId: Bytes! # bytes6
   baseId: Bytes! # bytes6
   fyToken: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-  index: BigInt!
-}
-
-type SeriesMatured @entity(immutable: true) {
-  id: Bytes!
-  seriesId: Bytes! # bytes6
-  rateAtMaturity: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-  index: BigInt!
+  matured: Boolean! # bool
 }
 
 type SpotOracleAdded @entity(immutable: true) {
