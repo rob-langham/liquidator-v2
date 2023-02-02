@@ -26,7 +26,7 @@ import {
   ContangoWitchRoleAdminChanged,
   ContangoWitchRoleGranted,
   ContangoWitchRoleRevoked,
-  WitchLiquidatablePairs
+  WitchLiquidatablePair
 } from "../generated/schema"
 
 export function handleAnotherWitchSet(event: AnotherWitchSetEvent): void {
@@ -150,10 +150,10 @@ export function handleLimitSet(event: LimitSetEvent): void {
 export function storeWitchLiquidationFlagUpdate(ilkId: Bytes, baseId: Bytes, max: BigInt): void {
   const id = ilkId.concat(baseId)
   
-  let entity = WitchLiquidatablePairs.load(id)
+  let entity = WitchLiquidatablePair.load(id)
 
   if (entity == null) {
-    entity = new WitchLiquidatablePairs(id)
+    entity = new WitchLiquidatablePair(id)
     entity.ilkId = ilkId
     entity.baseId = baseId
   }

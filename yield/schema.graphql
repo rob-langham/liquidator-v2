@@ -286,7 +286,7 @@ type LimitSet @entity(immutable: true) {
   index: BigInt!
 }
 
-type WitchLiquidatablePairs @entity(immutable: false) {
+type WitchLiquidatablePair @entity(immutable: false) {
   id: Bytes!
   ilkId: Bytes! # bytes6
   baseId: Bytes! # bytes6
