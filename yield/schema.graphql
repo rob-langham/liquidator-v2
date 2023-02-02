@@ -5,12 +5,13 @@ type VaultEntity @entity(immutable: false) {
   owner: Bytes! # address
   seriesId: Bytes! # bytes6
   ilkId: Bytes! # bytes6
-  ink: BigInt! # int128
-  art: BigInt! # int128
+  ink: BigInt! # uint128
+  art: BigInt! # uint128
   instrument: InstrumentEntity!
+  ratio: BigInt! # uint128
 }
 
-type SeriesEntity @entity(immutable: true) {
+type SeriesEntity @entity(immutable: false) {
   id: Bytes!
   baseId: Bytes! # bytes6
   fyToken: Bytes! # address

@@ -371,6 +371,12 @@ function storeVaultUpdate(
     entity.art = art ? (delta ? entity.art.plus(art) : art) : entity.art;
   }
 
+  if(entity.ink.gt(BigInt.fromI32(0))) {
+    entity.ratio = entity.art.leftShift(64).div(entity.ink);
+  } else {
+    entity.ratio = BigInt.fromI32(0);
+  }
+
   if (owner) {
     entity.owner = owner;
   }
