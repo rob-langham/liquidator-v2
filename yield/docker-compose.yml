@@ -22,12 +22,14 @@ services:
       GRAPH_LOG: info
       GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: 10000000
   ipfs:
+    restart: unless-stopped
     image: ipfs/go-ipfs:v0.10.0
     ports:
       - '5001:5001'
     volumes:
       - indexer-ipfs:/data/ipfs
   postgres:
+    restart: unless-stopped
     image: postgres
     ports:
       - '5432:5432'
