@@ -1,3 +1,49 @@
+# Entities
+
+type VaultEntity @entity(immutable: false) {
+  id: Bytes!
+  owner: Bytes! # address
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  ink: BigInt! # int128
+  art: BigInt! # int128
+  instrument: InstrumentEntity!
+}
+
+type SeriesEntity @entity(immutable: true) {
+  id: Bytes!
+  baseId: Bytes! # bytes6
+  fyToken: Bytes! # address
+  matured: Boolean! # bool
+  asset: AssetEntity!
+  instruments: [InstrumentEntity!]! @derivedFrom(field: "series")
+}
+
+type AssetEntity @entity(immutable: true) {
+  id: ID!
+  assetId: Bytes!
+  address: Bytes! # address
+  series: [SeriesEntity!]! @derivedFrom(field: "asset")
+}
+
+type InstrumentEntity @entity(immutable: true) {
+  id: Bytes!
+  seriesId: Bytes! # bytes6
+  ilkId: Bytes! # bytes6
+  series: SeriesEntity!
+  vaults: [VaultEntity!]! @derivedFrom(field: "instrument")
+}
+
+type WitchLiquidatablePair @entity(immutable: false) {
+  id: Bytes!
+  ilkId: Bytes! # bytes6
+  baseId: Bytes! # bytes6
+  liquidationsEnabled: Boolean! # uint128
+  asset: AssetEntity!
+}
+
+# Events
+
 type AdminChanged @entity(immutable: true) {
   id: Bytes!
   previousAdmin: Bytes! # address
@@ -25,15 +71,6 @@ type Upgraded @entity(immutable: true) {
   transactionHash: Bytes!
   index: BigInt!
 }
-type AssetAdded @entity(immutable: true) {
-  id: Bytes!
-  assetId: Bytes! # bytes6
-  asset: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-  index: BigInt!
-}
 
 type DebtLimitsSet @entity(immutable: true) {
   id: Bytes!
@@ -42,16 +79,6 @@ type DebtLimitsSet @entity(immutable: true) {
   max: BigInt! # uint96
   min: Int! # uint24
   dec: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-  index: BigInt!
-}
-
-type IlkAdded @entity(immutable: true) {
-  id: Bytes!
-  seriesId: Bytes! # bytes6
-  ilkId: Bytes! # bytes6
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -98,13 +125,6 @@ type RoleRevoked @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
   index: BigInt!
-}
-
-type SeriesEntity @entity(immutable: false) {
-  id: Bytes!
-  baseId: Bytes! # bytes6
-  fyToken: Bytes! # address
-  matured: Boolean! # bool
 }
 
 type SpotOracleAdded @entity(immutable: true) {
@@ -197,16 +217,6 @@ type VaultTweaked @entity(immutable: true) {
   index: BigInt!
 }
 
-type VaultEntity @entity(immutable: false) {
-  id: Bytes!
-  owner: Bytes! # address
-  seriesId: Bytes! # bytes6
-  ilkId: Bytes! # bytes6
-  ink: BigInt! # int128
-  art: BigInt! # int128
-  series: SeriesEntity!
-}
-
 type AnotherWitchSet @entity(immutable: true) {
   id: Bytes!
   value: Bytes! # address
@@ -284,13 +294,6 @@ type LimitSet @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
   index: BigInt!
-}
-
-type WitchLiquidatablePair @entity(immutable: false) {
-  id: Bytes!
-  ilkId: Bytes! # bytes6
-  baseId: Bytes! # bytes6
-  liquidationsEnabled: Boolean! # uint128
 }
 
 type LineSet @entity(immutable: true) {

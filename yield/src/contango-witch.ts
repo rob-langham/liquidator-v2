@@ -156,6 +156,7 @@ export function storeWitchLiquidationFlagUpdate(ilkId: Bytes, baseId: Bytes, max
     entity = new WitchLiquidatablePair(id)
     entity.ilkId = ilkId
     entity.baseId = baseId
+    entity.asset = baseId.toHex()
   }
 
   entity.liquidationsEnabled = max.gt(BigInt.fromI32(0))

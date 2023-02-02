@@ -1,4 +1,4 @@
-import { BigInt, Bytes, store } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
   AssetAdded as AssetAddedEvent,
   DebtLimitsSet as DebtLimitsSetEvent,
@@ -16,41 +16,28 @@ import {
   VaultPoured as VaultPouredEvent,
   VaultRolled as VaultRolledEvent,
   VaultStirred as VaultStirredEvent,
-  VaultTweaked as VaultTweakedEvent,
+  VaultTweaked as VaultTweakedEvent
 } from "../generated/ContangoCauldron/ContangoCauldron";
 import {
-  AssetAdded,
-  DebtLimitsSet,
-  IlkAdded,
+  AssetEntity, DebtLimitsSet, InstrumentEntity,
   RateOracleAdded,
   RoleAdminChanged,
   RoleGranted,
   RoleRevoked,
   SeriesEntity,
-  SpotOracleAdded,
-  VaultEntity,
-  VaultBuilt,
-  VaultDestroyed,
-  VaultGiven,
+  SpotOracleAdded, VaultBuilt,
+  VaultDestroyed, VaultEntity, VaultGiven,
   VaultPoured,
   VaultRolled,
   VaultStirred,
-  VaultTweaked,
+  VaultTweaked
 } from "../generated/schema";
 
 export function handleAssetAdded(event: AssetAddedEvent): void {
-  let entity = new AssetAdded(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.assetId = event.params.assetId;
-  entity.asset = event.params.asset;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.index = event.block.number.leftShift(32).plus(event.logIndex);
-
-  entity.save();
+  const asset = new AssetEntity(event.params.assetId.toHex());
+  asset.assetId = event.params.assetId;
+  asset.address = event.params.asset;
+  asset.save();
 }
 
 export function handleDebtLimitsSet(event: DebtLimitsSetEvent): void {
@@ -72,18 +59,11 @@ export function handleDebtLimitsSet(event: DebtLimitsSetEvent): void {
 }
 
 export function handleIlkAdded(event: IlkAddedEvent): void {
-  let entity = new IlkAdded(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  entity.seriesId = event.params.seriesId;
-  entity.ilkId = event.params.ilkId;
-
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.index = event.block.number.leftShift(32).plus(event.logIndex);
-
-  entity.save();
+  const instrument = new InstrumentEntity(event.params.seriesId.concat(event.params.ilkId));
+  instrument.seriesId = event.params.seriesId;
+  instrument.ilkId = event.params.ilkId;
+  instrument.series = event.params.seriesId;
+  instrument.save();
 }
 
 export function handleRateOracleAdded(event: RateOracleAddedEvent): void {
@@ -153,6 +133,7 @@ export function handleSeriesAdded(event: SeriesAddedEvent): void {
   entity.baseId = event.params.baseId;
   entity.fyToken = event.params.fyToken;
   entity.matured = false;
+  entity.asset = event.params.baseId.toHex();
 
   entity.save();
 }
@@ -396,11 +377,14 @@ function storeVaultUpdate(
 
   if (seriesId) {
     entity.seriesId = seriesId;
-    entity.series = seriesId;
   }
 
   if (ilkId) {
     entity.ilkId = ilkId;
+  }
+
+  if(seriesId && ilkId) {
+    entity.instrument = seriesId.concat(ilkId);
   }
 
   entity.save();
