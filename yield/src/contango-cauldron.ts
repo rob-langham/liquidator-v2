@@ -11,6 +11,9 @@ import {
 } from "../generated/ContangoCauldron/ContangoCauldron";
 import { AssetEntity, InstrumentEntity, SeriesEntity, VaultEntity } from "../generated/schema";
 
+export const WAD = BigInt.fromI32(10).pow(18)
+export const ZERO: BigInt = BigInt.fromI32(0)
+
 export function handleAssetAdded(event: AssetAddedEvent): void {
   const asset = new AssetEntity(event.params.assetId.toHex());
   asset.assetId = event.params.assetId;
@@ -143,17 +146,17 @@ function storeVaultUpdate(
 
   if (!entity) {
     entity = new VaultEntity(vaultId);
-    entity.ink = ink ? entity.ink : BigInt.fromI32(0);
-    entity.art = art ? entity.art : BigInt.fromI32(0);
+    entity.ink = ink ? entity.ink : ZERO;
+    entity.art = art ? entity.art : ZERO;
   } else {
     entity.ink = ink ? (delta ? entity.ink.plus(ink) : ink) : entity.ink;
     entity.art = art ? (delta ? entity.art.plus(art) : art) : entity.art;
   }
 
-  if(entity.ink.gt(BigInt.fromI32(0))) {
-    entity.ratio = entity.art.leftShift(64).div(entity.ink);
+  if (entity.ink.gt(ZERO)) {
+    entity.ratio = entity.art.times(WAD).div(entity.ink);
   } else {
-    entity.ratio = BigInt.fromI32(0);
+    entity.ratio = ZERO;
   }
 
   if (owner) {
@@ -168,9 +171,7 @@ function storeVaultUpdate(
     entity.ilkId = ilkId;
   }
 
-  if(seriesId && ilkId) {
-    entity.instrument = seriesId.concat(ilkId);
-  }
+  entity.instrument = entity.seriesId.concat(entity.ilkId);
 
   entity.save();
 }

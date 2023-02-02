@@ -31,7 +31,7 @@ let ilkId = Bytes.fromI32(1);
 let owner = Address.fromString("0x0000000000000000000000000000000000000001");
 
 describe("Vault events", () => {
-  beforeAll(() => {});
+  beforeAll(() => { });
 
   beforeEach(() => {
     // just ensures we are testing dynamic values, it's not necessary to do this
@@ -51,7 +51,7 @@ describe("Vault events", () => {
 
     assert.entityCount("VaultEntity", 1);
     thenVaultOwnerShouldMatch(vaultId, owner);
-    thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
+    thenVaultAssetShouldMatch(vaultId, seriesId, ilkId);
     thenVaultBalanceShouldMatch(vaultId, BigInt.fromI32(0), BigInt.fromI32(0));
   });
 
@@ -94,6 +94,18 @@ describe("Vault events", () => {
       );
     });
 
+    test("should set ratio on ink/art", () => {
+      givenVaultBuiltEvent();
+      givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
+      givenVaultPouredEvent(BigInt.fromI32(0), BigInt.fromI32(-150));
+
+      assert.entityCount("VaultEntity", 1);
+      thenVaultRatioShouldMatch(
+        vaultId,
+        BigInt.fromI64(500000000000000000)
+      );
+    });
+
     test("should set delta on both", () => {
       givenVaultBuiltEvent();
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
@@ -120,7 +132,7 @@ describe("Vault events", () => {
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
 
       assert.entityCount("VaultEntity", 1);
-      thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
+      thenVaultAssetShouldMatch(vaultId, seriesId, ilkId);
     });
   });
 
@@ -131,7 +143,7 @@ describe("Vault events", () => {
 
       assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
-      thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(2), ilkId);
+      thenVaultAssetShouldMatch(vaultId, Bytes.fromI32(2), ilkId);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(0),
@@ -145,7 +157,7 @@ describe("Vault events", () => {
 
       assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
-      thenVaultAssestShouldMatch(vaultId, seriesId, Bytes.fromI32(2));
+      thenVaultAssetShouldMatch(vaultId, seriesId, Bytes.fromI32(2));
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(0),
@@ -188,7 +200,7 @@ describe("Vault events", () => {
       givenVaultRolledEvent(vaultId, Bytes.fromI32(4), BigInt.fromI32(200));
 
       assert.entityCount("VaultEntity", 1);
-      thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
+      thenVaultAssetShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
     });
 
     test("should not update ink", () => {
@@ -204,7 +216,7 @@ describe("Vault events", () => {
       givenVaultRolledEvent(vaultId, Bytes.fromI32(4), BigInt.fromI32(200));
 
       assert.entityCount("VaultEntity", 1);
-      thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
+      thenVaultAssetShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
     });
 
     test("should update art", () => {
@@ -243,7 +255,7 @@ describe("Vault events", () => {
       );
 
       assert.entityCount("VaultEntity", 1);
-      thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
+      thenVaultAssetShouldMatch(vaultId, seriesId, ilkId);
     });
 
     test("should not update balances", () => {
@@ -308,8 +320,8 @@ describe("Vault events", () => {
       );
 
       assert.entityCount("VaultEntity", 2);
-      thenVaultAssestShouldMatch(firstVaultId, seriesId, ilkId);
-      thenVaultAssestShouldMatch(secondVaultId, seriesId, ilkId);
+      thenVaultAssetShouldMatch(firstVaultId, seriesId, ilkId);
+      thenVaultAssetShouldMatch(secondVaultId, seriesId, ilkId);
     });
 
     test("should not update the owner", () => {
@@ -444,18 +456,14 @@ function thenVaultOwnerShouldMatch(vaultId: Bytes, owner: Address): void {
   assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "owner", owner.toHex());
 }
 
-function thenVaultAssestShouldMatch(
+function thenVaultAssetShouldMatch(
   vaultId: Bytes,
   seriesId: Bytes,
   ilkId: Bytes
 ): void {
-  assert.fieldEquals(
-    "VaultEntity",
-    vaultIdHex(vaultId),
-    "seriesId",
-    seriesId.toHex()
-  );
+  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "seriesId", seriesId.toHex());
   assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ilkId", ilkId.toHex());
+  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "instrument", seriesId.concat(ilkId).toHex());
 }
 
 function thenVaultBalanceShouldMatch(
@@ -467,6 +475,13 @@ function thenVaultBalanceShouldMatch(
     assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ink", ink.toString());
   if (art !== null)
     assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "art", art.toString());
+}
+
+function thenVaultRatioShouldMatch(
+  vaultId: Bytes,
+  ratio: BigInt
+): void {
+  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ratio", ratio.toString());
 }
 
 function vaultIdHex(id: Bytes | null): string {
