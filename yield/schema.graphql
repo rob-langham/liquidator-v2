@@ -100,7 +100,7 @@ type RoleRevoked @entity(immutable: true) {
   index: BigInt!
 }
 
-type Series @entity(immutable: false) {
+type SeriesEntity @entity(immutable: false) {
   id: Bytes!
   baseId: Bytes! # bytes6
   fyToken: Bytes! # address
@@ -197,13 +197,14 @@ type VaultTweaked @entity(immutable: true) {
   index: BigInt!
 }
 
-type Vault @entity(immutable: false) {
+type VaultEntity @entity(immutable: false) {
   id: Bytes!
   owner: Bytes! # address
   seriesId: Bytes! # bytes6
   ilkId: Bytes! # bytes6
   ink: BigInt! # int128
   art: BigInt! # int128
+  series: SeriesEntity!
 }
 
 type AnotherWitchSet @entity(immutable: true) {

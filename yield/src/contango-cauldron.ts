@@ -26,11 +26,9 @@ import {
   RoleAdminChanged,
   RoleGranted,
   RoleRevoked,
-  Series,
-  SeriesAdded,
-  SeriesMatured,
+  SeriesEntity,
   SpotOracleAdded,
-  Vault,
+  VaultEntity,
   VaultBuilt,
   VaultDestroyed,
   VaultGiven,
@@ -151,7 +149,7 @@ export function handleRoleRevoked(event: RoleRevokedEvent): void {
 }
 
 export function handleSeriesAdded(event: SeriesAddedEvent): void {
-  let entity = new Series(event.params.seriesId);
+  let entity = new SeriesEntity(event.params.seriesId);
   entity.baseId = event.params.baseId;
   entity.fyToken = event.params.fyToken;
   entity.matured = false;
@@ -160,10 +158,12 @@ export function handleSeriesAdded(event: SeriesAddedEvent): void {
 }
 
 export function handleSeriesMatured(event: SeriesMaturedEvent): void {
-  let entity = SeriesMatured.load(event.params.seriesId);
-  entity.matured = true;
-  
-  entity.save();
+  let entity = SeriesEntity.load(event.params.seriesId);
+
+  if (entity != null) {
+    entity.matured = true;
+    entity.save();
+  }
 }
 
 export function handleSpotOracleAdded(event: SpotOracleAddedEvent): void {
@@ -226,7 +226,7 @@ export function handleVaultDestroyed(event: VaultDestroyedEvent): void {
   storeVaultUpdate(event.params.vaultId, null, null, null, null, null, true);
 
   // store.remove('Vault', "0x" + BigInt.fromUnsignedBytes(event.params.vaultId).toHex().substring(2).padStart(24, '0'))
-  store.remove("Vault", event.params.vaultId.toHex());
+  // store.remove("Vault", event.params.vaultId.toHex());
 }
 
 export function handleVaultGiven(event: VaultGivenEvent): void {
@@ -379,10 +379,10 @@ function storeVaultUpdate(
   owner: Bytes | null,
   delta: boolean = false
 ): void {
-  let entity = Vault.load(vaultId);
+  let entity = VaultEntity.load(vaultId);
 
   if (!entity) {
-    entity = new Vault(vaultId);
+    entity = new VaultEntity(vaultId);
     entity.ink = ink ? entity.ink : BigInt.fromI32(0);
     entity.art = art ? entity.art : BigInt.fromI32(0);
   } else {
@@ -396,6 +396,7 @@ function storeVaultUpdate(
 
   if (seriesId) {
     entity.seriesId = seriesId;
+    entity.series = seriesId;
   }
 
   if (ilkId) {
