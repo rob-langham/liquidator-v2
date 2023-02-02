@@ -1,17 +1,8 @@
+import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts"
 import { newMockEvent } from "matchstick-as"
-import { ethereum, Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
-  AssetAdded,
-  DebtLimitsSet,
-  IlkAdded,
-  RateOracleAdded,
-  RoleAdminChanged,
-  RoleGranted,
-  RoleRevoked,
-  SeriesAdded,
-  SeriesMatured,
-  SpotOracleAdded,
-  VaultBuilt,
+  AssetAdded, IlkAdded, SeriesAdded,
+  SeriesMatured, VaultBuilt,
   VaultDestroyed,
   VaultGiven,
   VaultPoured,
@@ -38,42 +29,6 @@ export function createAssetAddedEvent(
   return assetAddedEvent
 }
 
-export function createDebtLimitsSetEvent(
-  baseId: Bytes,
-  ilkId: Bytes,
-  max: BigInt,
-  min: i32,
-  dec: i32
-): DebtLimitsSet {
-  let debtLimitsSetEvent = changetype<DebtLimitsSet>(newMockEvent())
-
-  debtLimitsSetEvent.parameters = new Array()
-
-  debtLimitsSetEvent.parameters.push(
-    new ethereum.EventParam("baseId", ethereum.Value.fromFixedBytes(baseId))
-  )
-  debtLimitsSetEvent.parameters.push(
-    new ethereum.EventParam("ilkId", ethereum.Value.fromFixedBytes(ilkId))
-  )
-  debtLimitsSetEvent.parameters.push(
-    new ethereum.EventParam("max", ethereum.Value.fromUnsignedBigInt(max))
-  )
-  debtLimitsSetEvent.parameters.push(
-    new ethereum.EventParam(
-      "min",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(min))
-    )
-  )
-  debtLimitsSetEvent.parameters.push(
-    new ethereum.EventParam(
-      "dec",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(dec))
-    )
-  )
-
-  return debtLimitsSetEvent
-}
-
 export function createIlkAddedEvent(seriesId: Bytes, ilkId: Bytes): IlkAdded {
   let ilkAddedEvent = changetype<IlkAdded>(newMockEvent())
 
@@ -87,89 +42,6 @@ export function createIlkAddedEvent(seriesId: Bytes, ilkId: Bytes): IlkAdded {
   )
 
   return ilkAddedEvent
-}
-
-export function createRateOracleAddedEvent(
-  baseId: Bytes,
-  oracle: Address
-): RateOracleAdded {
-  let rateOracleAddedEvent = changetype<RateOracleAdded>(newMockEvent())
-
-  rateOracleAddedEvent.parameters = new Array()
-
-  rateOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("baseId", ethereum.Value.fromFixedBytes(baseId))
-  )
-  rateOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("oracle", ethereum.Value.fromAddress(oracle))
-  )
-
-  return rateOracleAddedEvent
-}
-
-export function createRoleAdminChangedEvent(
-  role: Bytes,
-  newAdminRole: Bytes
-): RoleAdminChanged {
-  let roleAdminChangedEvent = changetype<RoleAdminChanged>(newMockEvent())
-
-  roleAdminChangedEvent.parameters = new Array()
-
-  roleAdminChangedEvent.parameters.push(
-    new ethereum.EventParam("role", ethereum.Value.fromFixedBytes(role))
-  )
-  roleAdminChangedEvent.parameters.push(
-    new ethereum.EventParam(
-      "newAdminRole",
-      ethereum.Value.fromFixedBytes(newAdminRole)
-    )
-  )
-
-  return roleAdminChangedEvent
-}
-
-export function createRoleGrantedEvent(
-  role: Bytes,
-  account: Address,
-  sender: Address
-): RoleGranted {
-  let roleGrantedEvent = changetype<RoleGranted>(newMockEvent())
-
-  roleGrantedEvent.parameters = new Array()
-
-  roleGrantedEvent.parameters.push(
-    new ethereum.EventParam("role", ethereum.Value.fromFixedBytes(role))
-  )
-  roleGrantedEvent.parameters.push(
-    new ethereum.EventParam("account", ethereum.Value.fromAddress(account))
-  )
-  roleGrantedEvent.parameters.push(
-    new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
-  )
-
-  return roleGrantedEvent
-}
-
-export function createRoleRevokedEvent(
-  role: Bytes,
-  account: Address,
-  sender: Address
-): RoleRevoked {
-  let roleRevokedEvent = changetype<RoleRevoked>(newMockEvent())
-
-  roleRevokedEvent.parameters = new Array()
-
-  roleRevokedEvent.parameters.push(
-    new ethereum.EventParam("role", ethereum.Value.fromFixedBytes(role))
-  )
-  roleRevokedEvent.parameters.push(
-    new ethereum.EventParam("account", ethereum.Value.fromAddress(account))
-  )
-  roleRevokedEvent.parameters.push(
-    new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
-  )
-
-  return roleRevokedEvent
 }
 
 export function createSeriesAddedEvent(
@@ -213,32 +85,6 @@ export function createSeriesMaturedEvent(
   )
 
   return seriesMaturedEvent
-}
-
-export function createSpotOracleAddedEvent(
-  baseId: Bytes,
-  ilkId: Bytes,
-  oracle: Address,
-  ratio: BigInt
-): SpotOracleAdded {
-  let spotOracleAddedEvent = changetype<SpotOracleAdded>(newMockEvent())
-
-  spotOracleAddedEvent.parameters = new Array()
-
-  spotOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("baseId", ethereum.Value.fromFixedBytes(baseId))
-  )
-  spotOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("ilkId", ethereum.Value.fromFixedBytes(ilkId))
-  )
-  spotOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("oracle", ethereum.Value.fromAddress(oracle))
-  )
-  spotOracleAddedEvent.parameters.push(
-    new ethereum.EventParam("ratio", ethereum.Value.fromUnsignedBigInt(ratio))
-  )
-
-  return spotOracleAddedEvent
 }
 
 export function createVaultBuiltEvent(

@@ -1,35 +1,25 @@
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
-  assert,
-  describe,
-  test,
-  clearStore,
-  beforeAll,
-  afterAll,
-  beforeEach,
-  afterEach,
+  afterEach, assert, beforeAll, beforeEach, clearStore, describe,
+  test
 } from "matchstick-as/assembly/index";
-import { Bytes, Address, BigInt, Entity } from "@graphprotocol/graph-ts";
-import { AssetAdded } from "../generated/schema";
-import { AssetAdded as AssetAddedEvent } from "../generated/ContangoCauldron/ContangoCauldron";
 import {
-  handleAssetAdded,
   handleVaultBuilt,
   handleVaultDestroyed,
   handleVaultGiven,
   handleVaultPoured,
   handleVaultRolled,
   handleVaultStirred,
-  handleVaultTweaked,
+  handleVaultTweaked
 } from "../src/contango-cauldron";
 import {
-  createAssetAddedEvent,
   createVaultBuiltEvent,
   createVaultDestroyedEvent,
   createVaultGivenEvent,
   createVaultPouredEvent,
   createVaultRolledEvent,
   createVaultStirredEvent,
-  createVaultTweakedEvent,
+  createVaultTweakedEvent
 } from "./contango-cauldron-utils";
 
 // Tests structure (matchstick-as >=0.5.0)
@@ -78,7 +68,7 @@ describe("Vault events", () => {
       assert.entityCount("Vault", 1);
     });
 
-    test("should set delat on ink", () => {
+    test("should set delta on ink", () => {
       givenVaultBuiltEvent();
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
       givenVaultPouredEvent(BigInt.fromI32(-50), BigInt.fromI32(0));
