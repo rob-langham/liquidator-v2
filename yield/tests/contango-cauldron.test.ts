@@ -49,7 +49,7 @@ describe("Vault events", () => {
   test("VaultBuilt", () => {
     givenVaultBuiltEvent();
 
-    assert.entityCount("Vault", 1);
+    assert.entityCount("VaultEntity", 1);
     thenVaultOwnerShouldMatch(vaultId, owner);
     thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
     thenVaultBalanceShouldMatch(vaultId, BigInt.fromI32(0), BigInt.fromI32(0));
@@ -65,7 +65,7 @@ describe("Vault events", () => {
         BigInt.fromI32(100),
         BigInt.fromI32(200)
       );
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
     });
 
     test("should set delta on ink", () => {
@@ -73,7 +73,7 @@ describe("Vault events", () => {
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
       givenVaultPouredEvent(BigInt.fromI32(-50), BigInt.fromI32(0));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(50),
@@ -86,7 +86,7 @@ describe("Vault events", () => {
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
       givenVaultPouredEvent(BigInt.fromI32(0), BigInt.fromI32(-150));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(100),
@@ -99,7 +99,7 @@ describe("Vault events", () => {
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
       givenVaultPouredEvent(BigInt.fromI32(-50), BigInt.fromI32(-150));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(50),
@@ -111,7 +111,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
     });
 
@@ -119,7 +119,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
     });
   });
@@ -129,7 +129,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultTweakedEvent(vaultId, Bytes.fromI32(2), ilkId);
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
       thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(2), ilkId);
       thenVaultBalanceShouldMatch(
@@ -143,7 +143,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultTweakedEvent(vaultId, seriesId, Bytes.fromI32(2));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
       thenVaultAssestShouldMatch(vaultId, seriesId, Bytes.fromI32(2));
       thenVaultBalanceShouldMatch(
@@ -157,7 +157,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultTweakedEvent(vaultId, seriesId, Bytes.fromI32(2));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
     });
 
@@ -165,7 +165,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultTweakedEvent(vaultId, seriesId, Bytes.fromI32(2));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(0),
@@ -179,7 +179,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultRolledEvent(vaultId, seriesId, BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(vaultId, owner);
     });
 
@@ -187,7 +187,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultRolledEvent(vaultId, Bytes.fromI32(4), BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
     });
 
@@ -195,7 +195,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultRolledEvent(vaultId, seriesId, BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(vaultId, BigInt.fromI32(0), null);
     });
 
@@ -203,7 +203,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultRolledEvent(vaultId, Bytes.fromI32(4), BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultAssestShouldMatch(vaultId, Bytes.fromI32(4), ilkId);
     });
 
@@ -211,7 +211,7 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       givenVaultRolledEvent(vaultId, seriesId, BigInt.fromI32(200));
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(0),
@@ -228,7 +228,7 @@ describe("Vault events", () => {
         Address.fromString("0x0003000600000800000000000000000000000002")
       );
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(
         vaultId,
         Address.fromString("0x0003000600000800000000000000000000000002")
@@ -242,7 +242,7 @@ describe("Vault events", () => {
         Address.fromString("0x0003000600000800000000000000000000000002")
       );
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultAssestShouldMatch(vaultId, seriesId, ilkId);
     });
 
@@ -254,7 +254,7 @@ describe("Vault events", () => {
         Address.fromString("0x0003000600000800000000000000000000000002")
       );
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultBalanceShouldMatch(
         vaultId,
         BigInt.fromI32(100),
@@ -279,7 +279,7 @@ describe("Vault events", () => {
         BigInt.fromI32(60)
       );
 
-      assert.entityCount("Vault", 2);
+      assert.entityCount("VaultEntity", 2);
       thenVaultBalanceShouldMatch(
         firstVaultId,
         BigInt.fromI32(50),
@@ -307,7 +307,7 @@ describe("Vault events", () => {
         BigInt.fromI32(60)
       );
 
-      assert.entityCount("Vault", 2);
+      assert.entityCount("VaultEntity", 2);
       thenVaultAssestShouldMatch(firstVaultId, seriesId, ilkId);
       thenVaultAssestShouldMatch(secondVaultId, seriesId, ilkId);
     });
@@ -327,7 +327,7 @@ describe("Vault events", () => {
         BigInt.fromI32(60)
       );
 
-      assert.entityCount("Vault", 2);
+      assert.entityCount("VaultEntity", 2);
       thenVaultOwnerShouldMatch(firstVaultId, owner);
       thenVaultOwnerShouldMatch(secondVaultId, owner);
     });
@@ -337,11 +337,11 @@ describe("Vault events", () => {
     test("should remove the vault", () => {
       givenVaultBuiltEvent();
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
 
       whenVaultDestroyedEvent(vaultId);
 
-      assert.entityCount("Vault", 0);
+      assert.entityCount("VaultEntity", 0);
     });
 
     test("should not remove any other vaults", () => {
@@ -350,11 +350,11 @@ describe("Vault events", () => {
       givenVaultBuiltEvent();
       const secondVaultId = vaultId;
 
-      assert.entityCount("Vault", 2);
+      assert.entityCount("VaultEntity", 2);
 
       whenVaultDestroyedEvent(secondVaultId);
 
-      assert.entityCount("Vault", 1);
+      assert.entityCount("VaultEntity", 1);
       thenVaultOwnerShouldMatch(firstVaultId, owner);
     });
   });
@@ -441,7 +441,7 @@ function whenVaultStirredEvent(
 }
 
 function thenVaultOwnerShouldMatch(vaultId: Bytes, owner: Address): void {
-  assert.fieldEquals("Vault", vaultIdHex(vaultId), "owner", owner.toHex());
+  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "owner", owner.toHex());
 }
 
 function thenVaultAssestShouldMatch(
@@ -450,12 +450,12 @@ function thenVaultAssestShouldMatch(
   ilkId: Bytes
 ): void {
   assert.fieldEquals(
-    "Vault",
+    "VaultEntity",
     vaultIdHex(vaultId),
     "seriesId",
     seriesId.toHex()
   );
-  assert.fieldEquals("Vault", vaultIdHex(vaultId), "ilkId", ilkId.toHex());
+  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ilkId", ilkId.toHex());
 }
 
 function thenVaultBalanceShouldMatch(
@@ -464,9 +464,9 @@ function thenVaultBalanceShouldMatch(
   art: BigInt | null
 ): void {
   if (ink !== null)
-    assert.fieldEquals("Vault", vaultIdHex(vaultId), "ink", ink.toString());
+    assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ink", ink.toString());
   if (art !== null)
-    assert.fieldEquals("Vault", vaultIdHex(vaultId), "art", art.toString());
+    assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "art", art.toString());
 }
 
 function vaultIdHex(id: Bytes | null): string {

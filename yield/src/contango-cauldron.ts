@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes, store } from "@graphprotocol/graph-ts";
 import {
   AssetAdded as AssetAddedEvent, IlkAdded as IlkAddedEvent, SeriesAdded as SeriesAddedEvent,
   SeriesMatured as SeriesMaturedEvent, VaultBuilt as VaultBuiltEvent,
@@ -58,9 +58,7 @@ export function handleVaultBuilt(event: VaultBuiltEvent): void {
 }
 
 export function handleVaultDestroyed(event: VaultDestroyedEvent): void {
-  storeVaultUpdate(event.params.vaultId, null, null, null, null, null, true);
-  // store.remove('Vault', "0x" + BigInt.fromUnsignedBytes(event.params.vaultId).toHex().substring(2).padStart(24, '0'))
-  // store.remove("Vault", event.params.vaultId.toHex());
+  store.remove("VaultEntity", event.params.vaultId.toHex());
 }
 
 export function handleVaultGiven(event: VaultGivenEvent): void {
