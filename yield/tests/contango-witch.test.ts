@@ -29,7 +29,7 @@ describe("Witch Liquidation Config", () => {
     givenDebtLimitSet(0);
 
     assert.fieldEquals(
-      "WitchLiquidatablePair",
+      "LiquidatablePairEntity",
       ilkId.concat(baseId).toHex(),
       "liquidationsEnabled",
       "false"
@@ -40,7 +40,7 @@ describe("Witch Liquidation Config", () => {
     givenDebtLimitSet(1);
 
     assert.fieldEquals(
-      "WitchLiquidatablePair",
+      "LiquidatablePairEntity",
       ilkId.concat(baseId).toHex(),
       "liquidationsEnabled",
       "true"
@@ -51,7 +51,7 @@ describe("Witch Liquidation Config", () => {
     givenDebtLimitSet(0);
 
     assert.fieldEquals(
-      "WitchLiquidatablePair",
+      "LiquidatablePairEntity",
       ilkId.concat(baseId).toHex(),
       "liquidationsEnabled",
       "false"
@@ -60,7 +60,7 @@ describe("Witch Liquidation Config", () => {
     givenDebtLimitSet(1);
 
     assert.fieldEquals(
-      "WitchLiquidatablePair",
+      "LiquidatablePairEntity",
       ilkId.concat(baseId).toHex(),
       "liquidationsEnabled",
       "true"

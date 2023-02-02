@@ -2,16 +2,16 @@ import { BigInt } from "@graphprotocol/graph-ts"
 import {
   LimitSet as LimitSetEvent
 } from "../generated/ContangoWitch/ContangoWitch"
-import { WitchLiquidatablePair } from "../generated/schema"
+import { LiquidatablePairEntity } from "../generated/schema"
 
 export function handleLimitSet(event: LimitSetEvent): void {
 
   const id = event.params.ilkId.concat(event.params.baseId)
 
-  let entity = WitchLiquidatablePair.load(id)
+  let entity = LiquidatablePairEntity.load(id)
 
   if (entity == null) {
-    entity = new WitchLiquidatablePair(id)
+    entity = new LiquidatablePairEntity(id)
     entity.ilkId = event.params.ilkId
     entity.baseId = event.params.baseId
     entity.asset = event.params.baseId.toHex()
