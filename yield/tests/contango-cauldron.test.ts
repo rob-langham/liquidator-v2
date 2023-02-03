@@ -1,25 +1,33 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
-  afterEach, assert, beforeAll, beforeEach, clearStore, describe,
-  test
+  afterEach,
+  assert,
+  beforeAll,
+  beforeEach,
+  clearStore,
+  describe,
+  test,
 } from "matchstick-as/assembly/index";
+import { InstrumentEntity } from "../generated/schema";
 import {
+  handleIlkAdded,
   handleVaultBuilt,
   handleVaultDestroyed,
   handleVaultGiven,
   handleVaultPoured,
   handleVaultRolled,
   handleVaultStirred,
-  handleVaultTweaked
+  handleVaultTweaked,
 } from "../src/contango-cauldron";
 import {
+  createIlkAddedEvent,
   createVaultBuiltEvent,
   createVaultDestroyedEvent,
   createVaultGivenEvent,
   createVaultPouredEvent,
   createVaultRolledEvent,
   createVaultStirredEvent,
-  createVaultTweakedEvent
+  createVaultTweakedEvent,
 } from "./contango-cauldron-utils";
 
 // Tests structure (matchstick-as >=0.5.0)
@@ -27,16 +35,18 @@ import {
 
 let vaultId = Bytes.fromI32(2);
 let seriesId = Bytes.fromI32(1);
+let baseId = Bytes.fromI32(3);
 let ilkId = Bytes.fromI32(1);
 let owner = Address.fromString("0x0000000000000000000000000000000000000001");
 
 describe("Vault events", () => {
-  beforeAll(() => { });
+  beforeAll(() => {});
 
   beforeEach(() => {
     // just ensures we are testing dynamic values, it's not necessary to do this
     seriesId = Bytes.fromI32(seriesId.toI32() + 149);
     ilkId = Bytes.fromI32(seriesId.toI32() + 151);
+    baseId = Bytes.fromI32(seriesId.toI32() + 157);
   });
 
   afterEach(() => {
@@ -94,16 +104,13 @@ describe("Vault events", () => {
       );
     });
 
-    test("should set ratio on ink/art", () => {
+    test("should set ratio on art/ink", () => {
       givenVaultBuiltEvent();
       givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
       givenVaultPouredEvent(BigInt.fromI32(0), BigInt.fromI32(-150));
 
       assert.entityCount("VaultEntity", 1);
-      thenVaultRatioShouldMatch(
-        vaultId,
-        BigInt.fromI64(500000000000000000)
-      );
+      thenVaultRatioShouldMatch(vaultId, bigint("5e17"));
     });
 
     test("should set delta on both", () => {
@@ -229,6 +236,15 @@ describe("Vault events", () => {
         BigInt.fromI32(0),
         BigInt.fromI32(200)
       );
+    });
+
+    test("should update art/ink", () => {
+      givenVaultBuiltEvent();
+      givenVaultPouredEvent(BigInt.fromI32(100), BigInt.fromI32(200));
+      givenVaultRolledEvent(vaultId, seriesId, BigInt.fromI32(400));
+
+      assert.entityCount("VaultEntity", 1);
+      thenVaultRatioShouldMatch(vaultId, bigint("4e18"));
     });
   });
 
@@ -370,6 +386,43 @@ describe("Vault events", () => {
       thenVaultOwnerShouldMatch(firstVaultId, owner);
     });
   });
+
+  describe("IlkAdded, create an instrument entity", () => {
+    beforeEach(() => {
+      handleIlkAdded(createIlkAddedEvent(seriesId, ilkId));
+    });
+
+    test("entity created", () => {
+      assert.entityCount("InstrumentEntity", 1);
+    });
+
+    test("seriesId", () => {
+      assert.fieldEquals(
+        "InstrumentEntity",
+        seriesId.concat(ilkId).toHex(),
+        "seriesId",
+        seriesId.toHex()
+      );
+    });
+
+    test("ilkId", () => {
+      assert.fieldEquals(
+        "InstrumentEntity",
+        seriesId.concat(ilkId).toHex(),
+        "ilkId",
+        ilkId.toHex()
+      );
+    });
+
+    test("series FK", () => {
+      assert.fieldEquals(
+        "InstrumentEntity",
+        seriesId.concat(ilkId).toHex(),
+        "series",
+        seriesId.toHex()
+      );
+    });
+  });
 });
 
 function givenVaultBuiltEvent(): void {
@@ -453,7 +506,12 @@ function whenVaultStirredEvent(
 }
 
 function thenVaultOwnerShouldMatch(vaultId: Bytes, owner: Address): void {
-  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "owner", owner.toHex());
+  assert.fieldEquals(
+    "VaultEntity",
+    vaultIdHex(vaultId),
+    "owner",
+    owner.toHex()
+  );
 }
 
 function thenVaultAssetShouldMatch(
@@ -461,9 +519,24 @@ function thenVaultAssetShouldMatch(
   seriesId: Bytes,
   ilkId: Bytes
 ): void {
-  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "seriesId", seriesId.toHex());
-  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ilkId", ilkId.toHex());
-  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "instrument", seriesId.concat(ilkId).toHex());
+  assert.fieldEquals(
+    "VaultEntity",
+    vaultIdHex(vaultId),
+    "seriesId",
+    seriesId.toHex()
+  );
+  assert.fieldEquals(
+    "VaultEntity",
+    vaultIdHex(vaultId),
+    "ilkId",
+    ilkId.toHex()
+  );
+  assert.fieldEquals(
+    "VaultEntity",
+    vaultIdHex(vaultId),
+    "instrument",
+    seriesId.concat(ilkId).toHex()
+  );
 }
 
 function thenVaultBalanceShouldMatch(
@@ -472,16 +545,28 @@ function thenVaultBalanceShouldMatch(
   art: BigInt | null
 ): void {
   if (ink !== null)
-    assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ink", ink.toString());
+    assert.fieldEquals(
+      "VaultEntity",
+      vaultIdHex(vaultId),
+      "ink",
+      ink.toString()
+    );
   if (art !== null)
-    assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "art", art.toString());
+    assert.fieldEquals(
+      "VaultEntity",
+      vaultIdHex(vaultId),
+      "art",
+      art.toString()
+    );
 }
 
-function thenVaultRatioShouldMatch(
-  vaultId: Bytes,
-  ratio: BigInt
-): void {
-  assert.fieldEquals("VaultEntity", vaultIdHex(vaultId), "ratio", ratio.toString());
+function thenVaultRatioShouldMatch(vaultId: Bytes, ratio: BigInt): void {
+  assert.fieldEquals(
+    "VaultEntity",
+    vaultIdHex(vaultId),
+    "ratio",
+    ratio.toString()
+  );
 }
 
 function vaultIdHex(id: Bytes | null): string {
@@ -491,5 +576,16 @@ function vaultIdHex(id: Bytes | null): string {
       .toHex()
       .replace("0x", "")
       .padStart(24, "0")
+  );
+}
+
+/**
+ * @param value a whole number with a positive exponent
+ * @returns
+ */
+function bigint(value: string): BigInt {
+  const parts = value.split("e");
+  return BigInt.fromString(
+    parts[0] + "".padEnd(parseInt(parts[1] || "0") as i32, "0")
   );
 }

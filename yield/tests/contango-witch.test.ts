@@ -66,6 +66,35 @@ describe("Witch Liquidation Config", () => {
       "true"
     );
 
+  });
+
+  test("should set series id and also use it a the FK to the asset", () => {
+    givenDebtLimitSet(1);
+
+    assert.fieldEquals(
+      "LiquidatablePairEntity",
+      ilkId.concat(baseId).toHex(),
+      "asset",
+      baseId.toHex()
+    );
+
+    assert.fieldEquals(
+      "LiquidatablePairEntity",
+      ilkId.concat(baseId).toHex(),
+      "baseId",
+      baseId.toHex()
+    );
+  })
+
+  test("should set ilkId", () => {
+    givenDebtLimitSet(1);
+
+    assert.fieldEquals(
+      "LiquidatablePairEntity",
+      ilkId.concat(baseId).toHex(),
+      "ilkId",
+      ilkId.toHex()
+    );
   })
 
 });
