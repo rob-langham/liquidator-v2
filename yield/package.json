@@ -2,13 +2,14 @@
   "name": "yield",
   "license": "UNLICENSED",
   "scripts": {
+    "_codegen": "[[ \"`md5sum schema.graphql`\" == \"`cat .schema.md5`\" ]] || (graph codegen && md5sum schema.graphql > .schema.md5)",
     "codegen": "graph codegen",
-    "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ contango-xyz/arbitrum-yield",
-    "create-local": "graph create --node http://localhost:8020/ contango-xyz/arbitrum-yield",
-    "remove-local": "graph remove --node http://localhost:8020/ contango-xyz/arbitrum-yield",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 contango-xyz/arbitrum-yield",
-    "test": "graph test -d"
+    "build": "npm run _codegen && graph build",
+    "deploy": "npm run _codegen && graph deploy --node https://api.thegraph.com/deploy/ contango-xyz/arbitrum-yield",
+    "create-local": "npm run _codegen && graph create --node http://localhost:8020/ contango-xyz/arbitrum-yield",
+    "remove-local": "npm run _codegen && graph remove --node http://localhost:8020/ contango-xyz/arbitrum-yield",
+    "deploy-local": "npm run _codegen && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 contango-xyz/arbitrum-yield",
+    "test": "npm run _codegen && graph test"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.37.7",
